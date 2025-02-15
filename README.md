@@ -3,8 +3,7 @@
 We use `gpt-3.5-turbo-instruct` for the real estate data and use the data to build a personalized real estate agent. The agent will provide the user with a list of properties that are most likely to be of interest to them based on their preferences.
 
 - Use the `gpt-3.5-turbo-instruct` models to generate real estate data.
-- Integrate with COMET ML for experiment tracking and LLM Ops.
-- Integrate the kubeflow pipeline to automate the data generating, processing and model training process.
+- Integrate with `COMET ML` for experiment tracking and LLM Ops.
 - Apply `gradio` library to quickly create user interfaces for machine learning models.
 
 ## Project Setup
@@ -35,7 +34,15 @@ After installing all the necessary packages, you can save the current environmen
 pip freeze > requirements.txt
 ```
 
-This will generate a `requirements.txt` file with all the installed packages and their versions, which can be used to recreate the environment in the future.  
+This will generate a `requirements.txt` file with all the installed packages and their versions, which can be used to recreate the environment in the future. 
+
+### 5. Run the main script
+
+```bash
+python3 HomeMatch.py 
+```
+
+- You can also run the jupyter notebook script `HomeMatch.ipynb` to interact with the code cell by cell.
 
 ## Software Design Strategies
 
@@ -54,11 +61,12 @@ This will generate a `requirements.txt` file with all the installed packages and
 
 With the ability to search and retrieve listings based on both text and images, users can have a more intuitive and satisfying experience. They can find properties that match their preferences more easily, whether they are browsing through images or reading descriptions.
 
-## Kubeflow Pipeline Deployment
-
 ## Gradio Interactive Interface Demo
 
 ![Gradio Interface](demo_images/MLWebAppDemo.gif)
+
+## Experiment Tracking with COMET ML
+![COMET ML](demo_images/COMET.gif)
 
 ## Future Work
 
@@ -66,3 +74,4 @@ With the ability to search and retrieve listings based on both text and images, 
 - Test the outputs generated using CoT reasoning and iterate on our prompts and examples to improve the quality of the generated data.
 
 - Applying other performance metrics such as `METEOR` and `BERTScore` to evaluate the quality of the generated listings.
+- If we need the ability to efficiently look up neighborhoods then we refactor the code efficiently uses [`tf.lookup.StaticHashTable`](https://www.tensorflow.org/api_docs/python/tf/lookup/StaticHashTable) to manage neighborhood lookups, which can improve performance, especially when dealing with large datasets.
