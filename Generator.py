@@ -47,7 +47,8 @@ House Size: 3000 sqft
 Description: Spacious family home with breathtaking views of the mountains and a large backyard for outdoor entertaining.
 Neighborhood Description: Mountain View is known for its scenic landscape and outdoor activities, making it the ideal location for nature lovers and adventure seekers.
 """
-llm = OpenAI(model_name="gpt-3.5-turbo-instruct", temperature=0.7, api_key=openai_api_key, max_tokens = 500)
+model_name="gpt-3.5-turbo-instruct"
+llm = OpenAI(model_name=model_name, temperature=0.7, api_key=openai_api_key, max_tokens = 500)
 image_model = StableDiffusionPipeline.from_pretrained("CompVis/stable-diffusion-v1-4")
 
 # For Apple Silicon (M1/M2) replace mps to device if executing on other devices
@@ -56,6 +57,11 @@ image_model.to("mps")
 image_dir = "generated_images"
 os.makedirs(image_dir, exist_ok=True)
 
+# Log model parameters
+experiment.log_parameters({
+    "model_name": model_name,
+    "temperature": 0.7,
+})
 # Define the Listing data model
 class Listing(BaseModel):
     neighborhood: str = Field(description="The neighborhood where the property is located.")
@@ -128,6 +134,9 @@ few_shot_prompt = FewShotPromptTemplate(
 full_prompt = few_shot_prompt.format(sample=template, input=instruction)
 response = llm(full_prompt)
 print(f"Raw Response: {response}")
+
+# Log the generated response to COMET ML
+experiment.log_text(response, step=len(response))
 
 # Split the string into individual listings
 listings = response.strip().split('\n\n')
@@ -208,3 +217,9 @@ for generated, reference in zip(response, reference_listings):
     metrics = evaluate_generated_listings(generated, reference)
     print(f"Generated Listing: {generated}")
     print(f"Evaluation Metrics: {metrics}")
+    
+    # Log metrics to COMET ML
+    experiment.log_metric("bleu", metrics["bleu"])
+    experiment.log_metric("rouge1", metrics["rouge1"])
+    experiment.log_metric("rouge2", metrics["rouge2"])
+    experiment.log_metric("rougeL", metrics["rougeL"])
