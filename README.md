@@ -71,7 +71,7 @@ With the ability to search and retrieve listings based on both text and images, 
 ## Future Work
 
 - Carefully design our prompts to guide the model through the reasoning process. Such as, we might prompt the model to consider each attribute of the listing step-by-step.
-- Test the outputs generated using CoT reasoning and iterate on our prompts and examples to improve the quality of the generated data.
+- Evaluate the outputs generated through Chain of Thought (CoT) reasoning and refine our prompts and examples accordingly. This may include incorporating additional few-shot examples to enhance the quality of the generated data.
 
 - Applying other performance metrics such as `METEOR` and `BERTScore` to evaluate the quality of the generated listings.
 - If we need the ability to efficiently look up neighborhoods then we refactor the code efficiently uses [`tf.lookup.StaticHashTable`](https://www.tensorflow.org/api_docs/python/tf/lookup/StaticHashTable) to manage neighborhood lookups, which can improve performance, especially when dealing with large datasets.
